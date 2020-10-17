@@ -1,8 +1,13 @@
 var Verna, Elantra, Creta, Benz, cars;
-var wall;
+var wall, wallImage;
 var speed;
 var start;
 var deformation, weight;
+
+function preload()
+{
+  wallImage = loadImage("wall.jpg");
+}
 
 function setup() {
   createCanvas(1600,400);
@@ -31,6 +36,12 @@ function setup() {
   // cars.setVelocityEach(speed, 0);
 
   wall = createSprite(1500, 200, 60, height - 140);
+
+  // 2516
+  wall.addImage(wallImage);
+  wall.scale = 0.45;
+  console.log(wall.width);
+  console.log(wall.height);
 
   start = createSprite(800, 200, 100, 100);
 }
