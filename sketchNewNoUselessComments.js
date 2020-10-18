@@ -4,8 +4,8 @@ class Car {
     this.y = 200;
     this.weight;
     this.speed = Math.round(random(55, 90));
-    this.sprite;
-    this.deformation = (0.5 * this.weight * this.speed * this.speed) / 22500;
+    //this.sprite;
+    this.deformation; // = (0.5 * this.weight * this.speed * this.speed) / 22500;
     this.width = 50;
     this.height = 50;
     this.fill = "blue";
@@ -14,6 +14,10 @@ class Car {
   display() {
     fill(this.fill);
     rect(this.x, this.y, this.width, this.height);
+  }
+  setDeformationValue(){
+    this.deformation = (0.5 * this.weight * this.speed * this.speed) / 22500;
+    console.log(this.deformation);
   }
 }
 
@@ -32,23 +36,27 @@ function setup() {
 
   verna = new Car();
   verna.y = 80;
-  verna.weight = 1913;
-  verna.speed = speed;
+  verna.weight = Math.round(random(400, 1300));//1913;
+  verna.setDeformationValue();
+  //verna.speed = speed;
 
   elantra = new Car();
   elantra.y = 160;
-  elantra.weight = 2137;
-  elantra.speed = speed;
+  elantra.weight = Math.round(random(400, 1300));//2137;
+  elantra.setDeformationValue();
+  //elantra.speed = speed;
 
   creta = new Car();
   creta.y = 240;
-  creta.weight = 2017;
-  creta.speed = speed;
+  creta.weight = Math.round(random(400, 1300));//2017;
+  creta.setDeformationValue();
+  //creta.speed = speed;
 
   benz = new Car();
   benz.y = 320;
-  benz.weight = 1811;
-  benz.speed = speed;
+  benz.weight = Math.round(random(400, 1300));//1811;
+  benz.setDeformationValue();
+  //benz.speed = speed;
 
 }
 
@@ -77,6 +85,11 @@ function draw() {
     setVelocity(benz, benz.speed, 0);
   }
 
+  runCar(verna, creta);
+  runCar(creta, elantra);
+  runCar(elantra, benz);
+  runCar(benz);
+
   verna.display();
   elantra.display();
   creta.display();
@@ -103,12 +116,12 @@ function runCar(movingCar, startingCar) {
   }
 }
 
-function setVelocity(object, velocityX, velocityY) {
+function setVelocity(car, velocityX, velocityY) {
   // console.log("--------Velocity has been Set---------------");
   // object.x = 200;
-  object.x += velocityX;
+  car.x += velocityX;
   // object.y = 200;
-  object.y += velocityY;
-  console.log("--------Object X--------------" + object.x);
-  console.log("--------Object Y--------------" + object.y);
+  car.y += velocityY;
+  //console.log("--------car X--------------" + car.x);
+  //console.log("--------car Y--------------" + car.y);
 }
