@@ -4,6 +4,9 @@ class Car {
     this.y = 200;
     this.width = 50;
     this.height = 50;
+    this.weight = 1000;
+    this.speed = Math.round(random(55, 90));
+    this.deformation = (0.5 * this.weight * this.speed * this.speed) / 22500;
   }
   display() {
     rect(this.x, this.y, this.width, this.height);
@@ -43,23 +46,28 @@ function setup() {
   wall.scale = 0.45;
 
   start = createSprite(800, 200, 100, 100);
-  
+
   verna = new Car;
   verna.y = vernaSprite.y;
+  verna.weight = 1913;
 
   elantra = new Car;
   elantra.y = elantraSprite.y;
+  elantra.weight = 2137;
 
   creta = new Car;
   creta.y = cretaSprite.y;
+  creta.weight = 2017;
 
   benz = new Car;
   benz.y = benzSprite.y;
+  benz.weight = 1811;
+
 }
 
 function draw() {
   background("lightgreen");
-  
+
   verna.x = vernaSprite.x;
   elantra.x = elantraSprite.x;
   creta.x = cretaSprite.x;
@@ -74,6 +82,8 @@ function draw() {
     vernaSprite.setVelocity(0, 0);
     elantraSprite.setVelocity(speed, 0);
   }
+
+  // Used the class and met the requirements that were needed in class to make the code shorter.
 
   if ((wall.x - elantraSprite.x) < (wall.width + elantraSprite.width) / 2) {
     elantraSprite.setVelocity(0, 0);
