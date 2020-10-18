@@ -73,16 +73,15 @@ function setup() {
   // cretaSprite.weight = 2017;
   // benzSprite.weight = 1811;
 
-
   // cars.setVelocityEach(speed, 0);
 
   // wall = createSprite(1500, 200, 60, height - 140);
   wall = createSprite(1500, 200, 60, height / 2);
   wall.shapeColor = (80, 80, 80)
+  wall.scale = 0.45;
 
   // 2516
   // wall.addImage(wallImage);
-  wall.scale = 0.45;
   // console.log(wall.width);
   // console.log(wall.height);
 
