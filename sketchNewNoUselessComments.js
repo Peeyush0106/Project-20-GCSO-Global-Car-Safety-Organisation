@@ -54,7 +54,7 @@ function setup() {
 
 function draw() {
   background("lightgreen");
-  console.log(World.frameCount);
+  // console.log(World.frameCount);
 
   if (mousePressedOver(start)) {
     verna.shouldMove = true;
@@ -104,8 +104,11 @@ function runCar(movingCar, startingCar) {
 }
 
 function setVelocity(object, velocityX, velocityY) {
+  // console.log("--------Velocity has been Set---------------");
   // object.x = 200;
   object.x += velocityX;
   // object.y = 200;
-  // object.y += velocityY;
+  object.y += velocityY;
+  console.log("--------Object X--------------" + object.x);
+  console.log("--------Object Y--------------" + object.y);
 }
