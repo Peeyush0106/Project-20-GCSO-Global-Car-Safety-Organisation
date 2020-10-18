@@ -9,7 +9,6 @@
 //   }
 // }
 
-
 var vernaSprite, elantraSprite, cretaSprite, benzSprite, cars;
 var wall, wallImage;
 var start;

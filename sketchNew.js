@@ -1,17 +1,14 @@
 class Car {
-  constructor() {
-    this.x = 50;
-    this.y = 200;
-    this.width = 50;
-    this.height = 50;
-    this.weight = 1000;
-    this.speed = Math.round(random(55, 90));
-    this.deformation = (0.5 * this.weight * this.speed * this.speed) / 22500;
+    constructor() {
+      this.x = 50;
+      this.width = 50;
+      this.height = 50;
+      this.shapeColor = "red";
+    }
+    display() {
+      rect(this.x, 0, this.width, this.height);
+    }
   }
-  display() {
-    rect(this.x, this.y, this.width, this.height);
-  }
-}
 
 var vernaSprite, elantraSprite, cretaSprite, benzSprite, cars;
 var wall;
@@ -47,9 +44,12 @@ function setup() {
 
   start = createSprite(800, 200, 100, 100);
 
+  
   verna = new Car;
   verna.y = vernaSprite.y;
   verna.weight = 1913;
+  verna.shapeColor = "red";
+  console.log(verna.shapeColor);
 
   elantra = new Car;
   elantra.y = elantraSprite.y;
