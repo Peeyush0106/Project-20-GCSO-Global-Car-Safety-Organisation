@@ -84,6 +84,7 @@ function draw() {
   }
 
   // Used the class and met the requirements that were needed in class to make the code shorter.
+  // Used the class and met the requirements that were needed in class to make the code shorter. Added the deformation, weight and speed properties in the Car class. Changing the object color at a point is to be done.
 
   if ((wall.x - elantraSprite.x) < (wall.width + elantraSprite.width) / 2) {
     elantraSprite.setVelocity(0, 0);
