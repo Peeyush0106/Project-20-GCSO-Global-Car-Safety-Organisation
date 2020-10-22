@@ -1,7 +1,7 @@
 class BlockWall {
   constructor() {
     this.x = 1500;
-    this.y = 0;    
+    this.y = 0;
     this.width = 60;
     this.height = height;
     this.centerX = this.x + (this.width / 2);
@@ -50,8 +50,29 @@ var start;
 var speed;
 var right, left, up, down;
 
+var turboImage, enzoImage, gallardoImage, viperImage;
+
+function preload() {
+  turboImage = loadImage("Turbo2New.png");
+  enzoImage = loadImage("enzo.png");
+  gallardoImage = loadImage("Gallardo.png");
+  viperImage = loadImage("Viper.png");
+}
+
 function setup() {
   createCanvas(1600, 400);
+
+  turboImage.width = (turboImage.width / 10);
+  turboImage.height = (turboImage.height / 10);
+
+  enzoImage.width = (enzoImage.width / 10);
+  enzoImage.height = (enzoImage.height / 10);
+
+  gallardoImage.width = (gallardoImage.width / 10);
+  gallardoImage.height = (gallardoImage.height / 10);
+
+  viperImage.width = (viperImage.width / 10);
+  viperImage.height = (viperImage.height / 10);
 
   // wall = createSprite(1500, 200, 60, height * 2);
   // wall.shapeColor = (80, 80, 80);
@@ -59,15 +80,15 @@ function setup() {
   // // wall.scale = 0.45;
 
   wall = new BlockWall();
-  console.log("Wall CenterX - "+wall.centerX);
-  console.log("Wall CenterY - "+wall.centerY);
+  console.log("Wall CenterX - " + wall.centerX);
+  console.log("Wall CenterY - " + wall.centerY);
 
   start = createSprite(800, 200, 100, 100);
 
   turbo = new Car();
   turbo.brand = "Porsche";
   turbo.carName = "Porsche 911 996 Turbo";
-  turbo.y = 80;
+  turbo.y = 70;
   // turbo.weight = Math.round(random(400, 1300));//1913;
   turbo.weight = Math.round(random(400, 1300));//Exact weight of turbo in kg;
   turbo.setDeformationValue();
@@ -76,7 +97,7 @@ function setup() {
   viper = new Car();
   viper.brand = "Dodge";
   viper.carName = "Dodge Viper";
-  viper.y = 160;
+  viper.y = 150;
   viper.weight = Math.round(random(400, 1300));//2137;
   viper.setDeformationValue();
   //viper.speed = speed;
@@ -84,7 +105,7 @@ function setup() {
   gallardo = new Car();
   gallardo.brand = "Lamborghini"
   gallardo.carName = "Lamborghini Gallardo"
-  gallardo.y = 240;
+  gallardo.y = 230;
   gallardo.weight = Math.round(random(400, 1300));//2017;
   gallardo.setDeformationValue();
   //gallardo.speed = speed;
@@ -92,7 +113,7 @@ function setup() {
   enzo = new Car();
   enzo.brand = "Ferrari";
   enzo.carName = "Ferrari Enzo";
-  enzo.y = 320;
+  enzo.y = 310;
   enzo.weight = Math.round(random(400, 1300));//1811;
   enzo.setDeformationValue();
   //enzo.speed = speed;
@@ -132,18 +153,38 @@ function draw() {
   // runCar(enzo, gallardo);
   // runCar(gallardo);
 
-  turbo.display();
-  viper.display();
-  gallardo.display();
-  enzo.display();
+  // turbo.display();
+  // viper.display();
+  // gallardo.display();
+  // enzo.display();
   wall.display();
-
+  
+  image(turboImage, turbo.x - 25, turbo.y - 25);
+  image(enzoImage, enzo.x - 25, enzo.y - 60);
+  image(gallardoImage, gallardo.x - 25, gallardo.y - 25);
+  image(viperImage, viper.x - 25, viper.y - 25);
+  
   drawSprites();
+  
+  fill("red");
+  textSize(25);
+  // text("Mouse X: " + mouseX, 600, 150);
+  // text("Mouse Y: " + mouseY, 600, 250);
+  
+    showCarNames(turbo);
+    showCarNames(enzo);
+    showCarNames(gallardo);
+    showCarNames(viper);
+
+}
+
+function showCarNames(object) {
+  text(object.carName, 300, object.y + 20);
 }
 
 function runCar(movingCar, startingCar) {
   // if ((wall.x - movingCar.x) < (wall.width + movingCar.width) / 2) {
-  //console.log("Car to stop: " + movingCar.carName);
+    //console.log("Car to stop: " + movingCar.carName);
   if (isTouching(movingCar, wall)) {
     //console.log("----Car Touched---- ---- Touched Car's Name: " + movingCar.carName);
     movingCar.shouldMove = false;

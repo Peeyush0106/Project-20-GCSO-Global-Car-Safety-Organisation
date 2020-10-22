@@ -133,11 +133,11 @@ class BlockWall {
     // runCar(enzo, gallardo);
     // runCar(gallardo);
   
+    wall.display();
     turbo.display();
     viper.display();
     gallardo.display();
     enzo.display();
-    wall.display();
   
     drawSprites();
   }
