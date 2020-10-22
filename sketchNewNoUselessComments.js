@@ -1,11 +1,11 @@
 class BlockWall {
   constructor() {
     this.x = 1500;
-    this.y = 0;
-    this.centerX = this.x + (this.width / 2);
-    this.centerY = this.y + (this.height / 2);
+    this.y = 0;    
     this.width = 60;
     this.height = height;
+    this.centerX = this.x + (this.width / 2);
+    this.centerY = this.y + (this.height / 2);
   }
   display() {
     // fill(80, 80, 80);
@@ -39,6 +39,10 @@ class Car {
     this.deformation = (0.5 * this.weight * this.speed * this.speed) / 22500;
     console.log(this.deformation);
   }
+  setCenterCoordinates() {
+    this.centerX = this.x + (this.width / 2);
+    this.centerY = this.y + (this.height / 2);
+  }
 }
 
 // var wall;
@@ -55,6 +59,8 @@ function setup() {
   // // wall.scale = 0.45;
 
   wall = new BlockWall();
+  console.log("Wall CenterX - "+wall.centerX);
+  console.log("Wall CenterY - "+wall.centerY);
 
   start = createSprite(800, 200, 100, 100);
 
@@ -137,12 +143,12 @@ function draw() {
 
 function runCar(movingCar, startingCar) {
   // if ((wall.x - movingCar.x) < (wall.width + movingCar.width) / 2) {
-  console.log("Car to stop: " + movingCar.carName);
+  //console.log("Car to stop: " + movingCar.carName);
   if (isTouching(movingCar, wall)) {
-    console.log("----Car Touched---- ---- Touched Car's Name: " + movingCar.carName);
+    //console.log("----Car Touched---- ---- Touched Car's Name: " + movingCar.carName);
     movingCar.shouldMove = false;
     if (startingCar) {
-      console.log("Car to start: " + startingCar.carName);
+      //console.log("Car to start: " + startingCar.carName);
       startingCar.shouldMove = true;
     }
     if (movingCar.deformation < 100) {
@@ -173,4 +179,5 @@ function isTouching(target1, target2) {
 function setVelocity(car, velocityX, velocityY) {
   car.x += velocityX;
   car.y += velocityY;
+  car.setCenterCoordinates();
 }
