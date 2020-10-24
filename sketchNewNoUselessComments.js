@@ -1,6 +1,6 @@
 class BlockWall {
   constructor() {
-    this.x = 1500;
+    this.x = 1400;
     this.y = 0;
     this.width = 60;
     this.height = height;
@@ -9,8 +9,45 @@ class BlockWall {
   }
   display() {
     // fill(80, 80, 80);
-    fill("lightgreen");
+    fill(80, 80, 80);
     rect(this.x, this.y, this.width, this.height);
+  }
+  clicked() {
+    console.log("Nothing to do!");
+  }
+}
+
+class StartGameButton {
+  constructor() {
+    this.x = 750;
+    this.y = 150;
+    this.centerX = this.x + (this.width / 2);
+    this.centerY = this.y + (this.height / 2);
+    this.width = 120;
+    this.height = 50;
+    this.buttonEnable = true;
+    this.visible = true;
+  }
+  display() {
+    // fill(80, 80, 80);
+    if (this.visible === true) {
+      fill("darkblue");
+      rect(this.x, this.y, this.width, this.height);
+      fill("white");
+      textSize(30);
+      text("Start!", (this.x + 10), (((this.y + this.height / 2) + 10)));
+    }
+  }
+  clicked() {
+    if (mouseX >= (this.x) && mouseX <= (this.x + this.width)
+      && mouseY >= (this.y) && mouseY <= (this.y + this.height)) {
+      if (start.buttonEnable) {
+        turbo.shouldMove = true;
+        this.visible = false;
+        this.buttonEnable = false;
+        startGame = true;
+      }
+    }
   }
 }
 
@@ -24,15 +61,14 @@ class Car {
     this.deformation; // = (0.5 * this.weight * this.speed * this.speed) / 22500;
     this.width = 50;
     this.height = 50;
-    this.centerX = this.x + (this.width / 2);
-    this.centerY = this.y + (this.height / 2);
+    this.centerX;
+    this.centerY;
     this.fill = "blue";
     this.shouldMove = false;
     this.brand;
     this.carName;
   }
   display() {
-    fill(this.fill);
     rect(this.x, this.y, this.width, this.height);
   }
   setDeformationValue() {
@@ -43,12 +79,25 @@ class Car {
     this.centerX = this.x + (this.width / 2);
     this.centerY = this.y + (this.height / 2);
   }
+  clicked() {
+    console.log("Nothing to do!");
+  }
+
+  reset() {
+    this.x = 50;
+    this.speed = Math.round(random(55, 90));
+    this.centerX = this.x + (this.width / 2);
+    this.centerY = this.y + (this.height / 2);
+    this.shouldMove = false;
+  }
 }
 
 // var wall;
 var start;
 var speed;
 var right, left, up, down;
+
+var startGame = true;
 
 var turboImage, enzoImage, gallardoImage, viperImage;
 
@@ -83,7 +132,9 @@ function setup() {
   console.log("Wall CenterX - " + wall.centerX);
   console.log("Wall CenterY - " + wall.centerY);
 
-  start = createSprite(800, 200, 100, 100);
+  // start = createSprite(800, 200, 100, 100);
+
+  start = new StartGameButton();
 
   turbo = new Car();
   turbo.brand = "Porsche";
@@ -123,59 +174,119 @@ function draw() {
   background("lightgreen");
   // console.log(World.frameCount);
 
-  if (mousePressedOver(start)) {
-    turbo.shouldMove = true;
-    start.destroy();
+  if (startGame) {
+    // if (mouseClickedOver(start) && start.buttonEnable === true) {
+    // if (mouseClicked(start) && start.buttonEnable === true) {
+    //   turbo.shouldMove = true;
+    //   start.clicked();
+    // }
+
+    if (turbo.shouldMove) {
+      setVelocity(turbo, turbo.speed, 0);
+    }
+    if (gallardo.shouldMove) {
+      setVelocity(gallardo, gallardo.speed, 0);
+    }
+
+    if (viper.shouldMove) {
+      setVelocity(viper, viper.speed, 0);
+    }
+
+    if (enzo.shouldMove) {
+      setVelocity(enzo, enzo.speed, 0);
+    }
+
+    runCar(turbo, gallardo);
+    runCar(gallardo, viper);
+    runCar(viper, enzo);
+    runCar(enzo);
+
+    // runCar(turbo, viper);
+    // runCar(viper, enzo);
+    // runCar(enzo, gallardo);
+    // runCar(gallardo);
+
+    // turbo.display();
+    // viper.display();
+    // gallardo.display();
+    // enzo.display();
+    wall.display();
+    start.display();
+
   }
 
-  if (turbo.shouldMove) {
-    setVelocity(turbo, turbo.speed, 0);
-  }
-  if (gallardo.shouldMove) {
-    setVelocity(gallardo, gallardo.speed, 0);
-  }
-
-  if (viper.shouldMove) {
-    setVelocity(viper, viper.speed, 0);
+  if (restartGameConditions(enzo)) {
+    start.buttonEnable = true;
+    start.visible = true;
+    startGame = false
   }
 
-  if (enzo.shouldMove) {
-    setVelocity(enzo, enzo.speed, 0);
+  if (startGame === false) {
+    console.log("Start Game = false");
+    turbo.reset();
+    gallardo.reset();
+    viper.reset();
+    enzo.reset();
+    turbo.setDeformationValue();
+    gallardo.setDeformationValue();
+    viper.setDeformationValue();
+    enzo.setDeformationValue();
+    // turbo.x = 50;
+    // gallardo.x = 50;
+    // enzo.x = 50;
+    // viper.x = 50;
+    startGame = true;
   }
 
-  runCar(turbo, gallardo);
-  runCar(gallardo, viper);
-  runCar(viper, enzo);
-  runCar(enzo);
-
-  // runCar(turbo, viper);
-  // runCar(viper, enzo);
-  // runCar(enzo, gallardo);
-  // runCar(gallardo);
-
-  // turbo.display();
-  // viper.display();
-  // gallardo.display();
-  // enzo.display();
-  wall.display();
-  
-  image(turboImage, turbo.x - 25, turbo.y - 25);
-  image(enzoImage, enzo.x - 25, enzo.y - 60);
-  image(gallardoImage, gallardo.x - 25, gallardo.y - 25);
-  image(viperImage, viper.x - 25, viper.y - 25);
-  
   drawSprites();
-  
+
   fill("red");
   textSize(25);
-  // text("Mouse X: " + mouseX, 600, 150);
-  // text("Mouse Y: " + mouseY, 600, 250);
-  
-    showCarNames(turbo);
-    showCarNames(enzo);
-    showCarNames(gallardo);
-    showCarNames(viper);
+  line(220, 0, 220, 400);
 
+  line(0, 20, 1600, 20);
+  line(0, 110, 1600, 110);
+  line(0, 190, 1600, 190);
+  line(0, 270, 1600, 270);
+  line(0, 360, 1600, 360);
+
+  text("Mouse X: " + mouseX, 600, 150);
+  text("Mouse Y: " + mouseY, 600, 250);
+
+  image(turboImage, turbo.x, turbo.y - 55);
+  image(viperImage, viper.x + 40, viper.y - 45);
+  image(gallardoImage, gallardo.x + 40, gallardo.y - 35);
+  image(enzoImage, enzo.x - 25, enzo.y - 70);
+
+  showCarNames(turbo);
+  showCarNames(enzo);
+  showCarNames(gallardo);
+  showCarNames(viper);
+}
+
+function mouseClicked() {
+  // let d = dist(target.centerX, target.centerY, mouseX, mouseY);
+  // if (d < target.width) {
+  //   target.clicked();
+  // }
+  start.clicked();
+  if (restartGameConditions(enzo)) {
+    startGame = true;
+  }
+}
+
+// function mouseClickedOver(target) {
+//   var distance = dist(mouseX, mouseY, target.x, target.y);
+//   console.log("mouse pressed");
+//   if (distance <= 0 && mouseClicked()) {
+//     return true;
+//   }
+// }
+
+function restartGameConditions(lastCar) {
+  if (isTouching(lastCar, wall)) {
+    return true;
+  }
 }
 
 function showCarNames(object) {
@@ -184,7 +295,7 @@ function showCarNames(object) {
 
 function runCar(movingCar, startingCar) {
   // if ((wall.x - movingCar.x) < (wall.width + movingCar.width) / 2) {
-    //console.log("Car to stop: " + movingCar.carName);
+  //console.log("Car to stop: " + movingCar.carName);
   if (isTouching(movingCar, wall)) {
     //console.log("----Car Touched---- ---- Touched Car's Name: " + movingCar.carName);
     movingCar.shouldMove = false;
