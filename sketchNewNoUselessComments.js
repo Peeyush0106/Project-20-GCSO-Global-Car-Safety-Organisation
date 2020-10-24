@@ -13,16 +13,17 @@ class BlockWall {
   }
 }
 
-class StartGameButton {
-  constructor() {
+class GameButton {
+  constructor(operator, visible) {
     this.x = 750;
     this.y = 150;
     this.centerX = this.x + (this.width / 2);
     this.centerY = this.y + (this.height / 2);
     this.width = 120;
     this.height = 50;
-    this.buttonEnable = true;
-    this.visible = true;
+    this.buttonEnabled = visible;
+    this.visible = visible;
+    this.operator = operator;
   }
   display() {
     if (this.visible === true) {
@@ -30,18 +31,13 @@ class StartGameButton {
       rect(this.x, this.y, this.width, this.height);
       fill("white");
       textSize(30);
-      text("Start!", (this.x + 10), (((this.y + this.height / 2) + 10)));
+      text(this.operator, (this.x + 10), (((this.y + this.height / 2) + 10)));
     }
   }
   clicked() {
     if (mouseX >= (this.x) && mouseX <= (this.x + this.width)
       && mouseY >= (this.y) && mouseY <= (this.y + this.height)) {
-      if (start.buttonEnable) {
-        turbo.shouldMove = true;
-        this.visible = false;
-        this.buttonEnable = false;
-        startGame = true;
-      }
+      return true;
     }
   }
 }
@@ -87,7 +83,7 @@ var start;
 var speed;
 var right, left, up, down;
 
-var startGame = true;
+var gameState = "Ready";
 
 var turboImage, enzoImage, gallardoImage, viperImage;
 
@@ -114,7 +110,8 @@ function setup() {
   viperImage.height = (viperImage.height / 10);
 
   wall = new BlockWall();
-  start = new StartGameButton();
+  start = new GameButton("Start", true);
+  reset = new GameButton("Reset", false);
 
   turbo = new Car();
   turbo.brand = "Porsche";
@@ -149,12 +146,20 @@ function draw() {
   viper.setDeformationValue();
   enzo.setDeformationValue();
 
-  showDeformationColor(1160, turbo.y, turbo.fill, true);
-  showDeformationColor(1160, viper.y, viper.fill, true);
-  showDeformationColor(1160, gallardo.y, gallardo.fill, true);
-  showDeformationColor(1160, enzo.y, enzo.fill, true);
+  if(gameState === 'Ready') {
+    start.visible = true;
+    start.buttonEnabled = true;
+    start.display();
 
-  if (startGame) {
+    turbo.reset();
+    gallardo.reset();
+    viper.reset();
+    enzo.reset();    
+  }
+
+  wall.display();
+
+  if (gameState === 'Running') {
     if (turbo.shouldMove) {
       setVelocity(turbo, turbo.speed, 0);
     }
@@ -171,39 +176,38 @@ function draw() {
       setVelocity(enzo, enzo.speed, 0);
     }
 
-
     runCar(turbo, gallardo);
     runCar(gallardo, viper);
     runCar(viper, enzo);
     runCar(enzo);
-
-    wall.display();
-    start.display();
-
-    showDeformationText(turbo, turbo);
-    showDeformationText(viper, turbo);
-    showDeformationText(gallardo, turbo);
-    showDeformationText(enzo, turbo);
     
+  }
+  
+  if(gameState === "Stopped") {
+
+    showDeformationColor(1160, turbo.y, turbo.fill, true);
+    showDeformationColor(1160, viper.y, viper.fill, true);
+    showDeformationColor(1160, gallardo.y, gallardo.fill, true);
+    showDeformationColor(1160, enzo.y, enzo.fill, true);
+
+    showDeformationText(turbo);
+    showDeformationText(viper);
+    showDeformationText(gallardo);
+    showDeformationText(enzo);
+
+    //Reset Button
+    reset.visible = true;
+    reset.buttonEnabled = true;
+    reset.display();
   }
 
   if (restartGameConditions(enzo)) {
-    start.buttonEnable = true;
-    start.visible = true;
-    startGame = false
+    gameState = "Stopped";
+    
+    //start.buttonEnabled = true;
+    //start.visible = true;
+    //startGame = false;
   }
-
-  // if (!startGame) {
-  //   console.log("Start Game = false");
-  //   console.log("Mouse Pressed Over Start");
-
-  //   turbo.reset();
-  //   gallardo.reset();
-  //   viper.reset();
-  //   enzo.reset();
-  //   startGame = true;
-
-  // }
 
   fill("red");
   textSize(25);
@@ -229,15 +233,15 @@ function draw() {
   showCarNames(viper);
 }
 
-function showDeformationText(car, firstRunningCar) {
-  if (firstRunningCar.x === 50) {
+function showDeformationText(car) {
+  //if (firstRunningCar.x === 50) {
     fill(rgb(200, 0, 150));
     textSize(30);
-    text("Damage: " + Math.round(car.deformation), car.x + 900, car.y + 30);
+    text("Damage: " + Math.round(car.deformation), 950, car.y + 30);
     if (car.deformation === NaN) {
       car.deformation = 0;
     }
-  }
+  //}
 }
 function showDeformationColor(x, y, damageZone, create) {
   if (create === true) {
@@ -247,10 +251,29 @@ function showDeformationColor(x, y, damageZone, create) {
 }
 
 function mouseClicked() {
-  start.clicked();
-  if (restartGameConditions(enzo)) {
-    startGame = true;
+  if(start.buttonEnabled){
+    if (start.clicked()) {
+      console.log("Start Clicked");
+      turbo.shouldMove = true;
+      start.visible = false;
+      start.buttonEnabled = false;
+      //startGame = true;
+      gameState = "Running";
+    }
   }
+
+  if(reset.buttonEnabled){
+    if (reset.clicked()) {
+      console.log("Reset Clicked");
+      gameState = "Ready";
+      reset.visible = false;
+      reset.buttonEnabled = false;
+    }
+  }
+
+  // if (restartGameConditions(enzo)) {
+  //   startGame = true;
+  // }
 }
 
 function restartGameConditions(lastCar) {
@@ -278,7 +301,9 @@ function runCar(movingCar, startingCar) {
     else if (movingCar.deformation >= 180) {
       movingCar.fill = "red";
     }
+
     showDeformationColor(1160, movingCar.y, movingCar.fill, true);
+    showDeformationText(movingCar);
   }
 }
 
