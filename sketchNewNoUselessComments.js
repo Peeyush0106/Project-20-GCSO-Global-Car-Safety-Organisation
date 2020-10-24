@@ -12,9 +12,6 @@ class BlockWall {
     fill(80, 80, 80);
     rect(this.x, this.y, this.width, this.height);
   }
-  clicked() {
-    console.log("Nothing to do!");
-  }
 }
 
 class StartGameButton {
@@ -58,7 +55,7 @@ class Car {
     this.weight;
     this.speed = Math.round(random(55, 90));
     //this.sprite;
-    this.deformation; // = (0.5 * this.weight * this.speed * this.speed) / 22500;
+    this.deformation = 0; // = (0.5 * this.weight * this.speed * this.speed) / 22500;
     this.width = 50;
     this.height = 50;
     this.centerX;
@@ -73,14 +70,11 @@ class Car {
   }
   setDeformationValue() {
     this.deformation = (0.5 * this.weight * this.speed * this.speed) / 22500;
-    console.log(this.deformation);
+    // console.log(this.deformation);
   }
   setCenterCoordinates() {
     this.centerX = this.x + (this.width / 2);
     this.centerY = this.y + (this.height / 2);
-  }
-  clicked() {
-    console.log("Nothing to do!");
   }
 
   reset() {
@@ -129,8 +123,8 @@ function setup() {
   // // wall.scale = 0.45;
 
   wall = new BlockWall();
-  console.log("Wall CenterX - " + wall.centerX);
-  console.log("Wall CenterY - " + wall.centerY);
+  // console.log("Wall CenterX - " + wall.centerX);
+  // console.log("Wall CenterY - " + wall.centerY);
 
   // start = createSprite(800, 200, 100, 100);
 
@@ -142,7 +136,7 @@ function setup() {
   turbo.y = 70;
   // turbo.weight = Math.round(random(400, 1300));//1913;
   turbo.weight = Math.round(random(400, 1300));//Exact weight of turbo in kg;
-  turbo.setDeformationValue();
+  // turbo.setDeformationValue();
   //turbo.speed = speed;
 
   viper = new Car();
@@ -150,7 +144,7 @@ function setup() {
   viper.carName = "Dodge Viper";
   viper.y = 150;
   viper.weight = Math.round(random(400, 1300));//2137;
-  viper.setDeformationValue();
+  // viper.setDeformationValue();
   //viper.speed = speed;
 
   gallardo = new Car();
@@ -158,7 +152,7 @@ function setup() {
   gallardo.carName = "Lamborghini Gallardo"
   gallardo.y = 230;
   gallardo.weight = Math.round(random(400, 1300));//2017;
-  gallardo.setDeformationValue();
+  // gallardo.setDeformationValue();
   //gallardo.speed = speed;
 
   enzo = new Car();
@@ -166,7 +160,7 @@ function setup() {
   enzo.carName = "Ferrari Enzo";
   enzo.y = 310;
   enzo.weight = Math.round(random(400, 1300));//1811;
-  enzo.setDeformationValue();
+  // enzo.setDeformationValue();
   //enzo.speed = speed;
 }
 
@@ -184,6 +178,7 @@ function draw() {
     if (turbo.shouldMove) {
       setVelocity(turbo, turbo.speed, 0);
     }
+
     if (gallardo.shouldMove) {
       setVelocity(gallardo, gallardo.speed, 0);
     }
@@ -223,6 +218,11 @@ function draw() {
 
   if (startGame === false) {
     console.log("Start Game = false");
+    // turbo.x = 50;
+    // gallardo.x = 50;
+    // enzo.x = 50;
+    // viper.x = 50;
+    console.log("Mouse Pressed Over Start");
     turbo.reset();
     gallardo.reset();
     viper.reset();
@@ -231,14 +231,15 @@ function draw() {
     gallardo.setDeformationValue();
     viper.setDeformationValue();
     enzo.setDeformationValue();
-    // turbo.x = 50;
-    // gallardo.x = 50;
-    // enzo.x = 50;
-    // viper.x = 50;
     startGame = true;
   }
 
-  drawSprites();
+  if (startGame) {
+    showDeformations(turbo, turbo);
+    showDeformations(viper, turbo);
+    showDeformations(gallardo, turbo);
+    showDeformations(enzo, turbo);
+  }
 
   fill("red");
   textSize(25);
@@ -250,8 +251,8 @@ function draw() {
   line(0, 270, 1600, 270);
   line(0, 360, 1600, 360);
 
-  text("Mouse X: " + mouseX, 600, 150);
-  text("Mouse Y: " + mouseY, 600, 250);
+  // text("Mouse X: " + mouseX, 600, 150);
+  // text("Mouse Y: " + mouseY, 600, 250);
 
   image(turboImage, turbo.x, turbo.y - 55);
   image(viperImage, viper.x + 40, viper.y - 45);
@@ -262,6 +263,18 @@ function draw() {
   showCarNames(enzo);
   showCarNames(gallardo);
   showCarNames(viper);
+}
+
+function showDeformations(car, firstRunningCar) {
+  if (firstRunningCar.x === 50) {
+    // if (isTouching(car, wall)) {
+    fill(rgb(200, 0, 150));
+    textSize(30);
+    text("Damage: " + Math.round(car.deformation), car.x + 900, car.y + 30);
+    if (car.deformation === NaN) {
+      car.deformation = 0;
+    }
+  }
 }
 
 function mouseClicked() {
