@@ -1,3 +1,5 @@
+//Useful comments
+
 // function isTouching(target1, target2) {
 this.touches = function (target) {
     // right = this.x + (this.width / 2);
